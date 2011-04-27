@@ -1,4 +1,4 @@
-This is a fork of the [Polipo caching web proxy](http://www.pps.jussieu.fr/~jch/software/polipo/). You can read the [original README here](README.original).
+This is a fork of the [Polipo caching web proxy](http://www.pps.jussieu.fr/~jch/software/polipo/). You can read the [original README here](https://github.com/doublec/namecoin-polipo/blob/master/README.original).
 
 This fork adds support for looking up domain names using [Namecoin](http://www.bitcoin.org/smf/index.php?topic=6017), the distributed P2P naming system based on Bitcoin.
 
