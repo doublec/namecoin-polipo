@@ -201,6 +201,7 @@ THE SOFTWARE.
 #include "event.h"
 #include "io.h"
 #include "socks.h"
+#include "namecoind.h"
 #include "chunk.h"
 #include "object.h"
 #include "dns.h"

@@ -256,6 +256,36 @@ initDns()
 #endif
 }
 
+static int
+do_fake_lookup(const char* name, ObjectPtr object)
+{
+    struct addrinfo *ai, *entry, hints;
+    struct in_addr ina;
+    int rc;
+    int error, i;
+    unsigned char buf[1 + sizeof(HostAddressRec)];
+    AtomPtr a;
+
+    memset(buf, 0, sizeof(buf));
+    buf[0] = DNS_A;
+    buf[1] = 4;
+    rc = inet_aton(name, &ina);
+    memcpy(&buf[2], &ina, 4);
+    a = internAtomN(buf, 1 + sizeof(HostAddressRec));
+    if(a == NULL) {
+        object->flags &= ~OBJECT_INPROGRESS;
+        abortObject(object, 501, internAtom("Couldn't allocate address"));
+        notifyObject(object);
+        return 0;
+    }
+    object->headers = a;
+    object->age = current_time.tv_sec;
+    object->expires = current_time.tv_sec + 600;
+    object->flags &= ~(OBJECT_INITIAL | OBJECT_INPROGRESS);
+    notifyObject(object);
+    return 0;
+}
+
 int
 do_gethostbyname(char *origname,
                  int count,
@@ -267,6 +297,7 @@ do_gethostbyname(char *origname,
     AtomPtr name;
     GethostbynameRequestRec request;
     int done, rc;
+    const char* namecoind_name = namecoind_lookup(origname);
 
     memset(&request, 0, sizeof(request));
     request.name = NULL;
@@ -334,7 +365,10 @@ do_gethostbyname(char *origname,
 
     if((object->flags & (OBJECT_INITIAL | OBJECT_INPROGRESS)) ==
        OBJECT_INITIAL) {
-        if(dnsUseGethostbyname >= 3)
+        if (namecoind_name) {
+            rc = do_fake_lookup(namecoind_name, object);
+        }
+        else if(dnsUseGethostbyname >= 3)
             rc = really_do_gethostbyname(name, object);
         else
             rc = really_do_dns(name, object);
