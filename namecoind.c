@@ -147,7 +147,7 @@ static char *request(const char *url, const char* auth)
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [\"\", 999999],\"id\": 1}");
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen("{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [],\"id\": 1}"));
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen("{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [\"\", 999999],\"id\": 1}"));
 
     status = curl_easy_perform(curl);
     curl_slist_free_all(slist);
