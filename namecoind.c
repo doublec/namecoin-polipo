@@ -81,7 +81,7 @@ initNamecoind()
         scanNames();
 }
 
-#define BUFFER_SIZE  (256 * 1024)  /* 256 KB */
+#define BUFFER_SIZE  (10 * 1024 * 1024)  /* 256 KB */
 
 #define URL_FORMAT   "http://127.0.0.1:9332/"
 #define URL_SIZE     256
@@ -146,7 +146,7 @@ static char *request(const char *url, const char* auth)
     curl_easy_setopt(curl, CURLOPT_USERPWD, auth);
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [],\"id\": 1}");
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [\"\", 999999],\"id\": 1}");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen("{\"version\": \"1.1\",\"method\": \"name_scan\",\"params\": [],\"id\": 1}"));
 
     status = curl_easy_perform(curl);
